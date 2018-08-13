@@ -62,8 +62,7 @@ namespace LateRecognition
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "LateRecognition.Form1")
                 {
-                    Form1 activeForm = new Form1();
-                    activeForm.Show();
+                    
                 }
             }
             catch (Exception ex)

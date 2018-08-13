@@ -46,15 +46,20 @@
     <Reference Include="SAPBusinessOneSDK" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Form1.b1f">
-      <FormCategory>UserForm</FormCategory>
-    </None>
-    <Compile Include="Form1.b1f.cs">
-      <DependentUpon>Form1.b1f</DependentUpon>
+    <Compile Include="BankStatementRowDetailsExplanded.b1f.cs">
+      <DependentUpon>BankStatementRowDetailsExplanded.b1f</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BankStatementRowDetailsExplanded.b1f">
+      <FormCategory>SystemForm</FormCategory>
+    </None>
+    <None Include="BankStatementRowDetailsExplanded.b1f__orig_srf">
+      <DependentUpon>BankStatementRowDetailsExplanded.b1f</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
