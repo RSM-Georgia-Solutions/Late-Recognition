@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SAPbobsCOM;
 using SAPbouiCOM.Framework;
 
 namespace LateRecognition
@@ -15,15 +16,16 @@ namespace LateRecognition
             try
             {
                 Application oApp = null;
-                if (args.Length < 1)
-                {
-                    oApp = new Application();
-                }
-                else
-                {
-                    oApp = new Application(args[0]);
-                }
+                oApp = args.Length < 1 ? new Application() : new Application(args[0]);
+                XCompany = (Company)Application.SBO_Application.Company.GetDICompany();
                 Menu MyMenu = new Menu();
+                Recordset recSet1 = (Recordset)XCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+
+                string query = "SELECT LinkAct_18  FROM OACP where PeriodCat ='" +
+                               DateTime.Now.Year + "'";
+                recSet1.DoQuery(query);
+
+                DownPaymentTaxOffsetAcct = recSet1.Fields.Item("LinkAct_18").Value.ToString();
                 MyMenu.AddMenuItems();
                 oApp.RegisterMenuEventHandler(MyMenu.SBO_Application_MenuEvent);
                 Application.SBO_Application.AppEvent += new SAPbouiCOM._IApplicationEvents_AppEventEventHandler(SBO_Application_AppEvent);
@@ -34,7 +36,8 @@ namespace LateRecognition
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
         }
-
+        public static string DownPaymentTaxOffsetAcct { get; private set; }
+        public static SAPbobsCOM.Company XCompany;
         static void SBO_Application_AppEvent(SAPbouiCOM.BoAppEventTypes EventType)
         {
             switch (EventType)
