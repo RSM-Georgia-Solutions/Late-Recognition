@@ -9,7 +9,7 @@ using Application = SAPbouiCOM.Framework.Application;
 
 namespace LateRecognition
 {
-    [FormAttribute("10000008", "BankStatementRowDetailsExplanded.b1f")]
+    [FormAttribute("10000008", "Forms/BankStatementRowDetailsExplanded.b1f")]
     class BankStatementRowDetailsExplanded : SystemFormBase
     {
         public BankStatementRowDetailsExplanded()

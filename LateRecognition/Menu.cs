@@ -44,8 +44,8 @@ namespace LateRecognition
 
                 // Create s sub menu
                 oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
-                oCreationPackage.UniqueID = "LateRecognition.Form1";
-                oCreationPackage.String = "Form1";
+                oCreationPackage.UniqueID = "LateRecognition.CancelJournalEntrys";
+                oCreationPackage.String = "Cancel JournalEntrys";
                 oMenus.AddEx(oCreationPackage);
             }
             catch (Exception er)
@@ -60,9 +60,10 @@ namespace LateRecognition
 
             try
             {
-                if (pVal.BeforeAction && pVal.MenuUID == "LateRecognition.Form1")
+                if (pVal.BeforeAction && pVal.MenuUID == "LateRecognition.CancelJournalEntrys")
                 {
-                    
+                    CancelJournalEntrys activeForm = new CancelJournalEntrys();
+                    activeForm.Show();
                 }
             }
             catch (Exception ex)

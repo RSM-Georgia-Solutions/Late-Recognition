@@ -49,38 +49,35 @@
     <Reference Include="SAPBusinessOneSDK" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BankStatementDetails.b1f.cs">
+    <Compile Include="Forms\BankStatementDetails.b1f.cs">
       <DependentUpon>BankStatementDetails.b1f</DependentUpon>
     </Compile>
     <Compile Include="BankStatementDetailsModel.cs" />
-    <Compile Include="BankStatementRowDetailsExplanded.b1f.cs">
+    <Compile Include="Forms\BankStatementRowDetailsExplanded.b1f.cs">
       <DependentUpon>BankStatementRowDetailsExplanded.b1f</DependentUpon>
     </Compile>
-    <Compile Include="JournalEntry.b1f.cs">
-      <DependentUpon>JournalEntry.b1f</DependentUpon>
+    <Compile Include="Forms\CancelJournalEntrys.b1f.cs">
+      <DependentUpon>CancelJournalEntrys.b1f</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BankStatementDetails.b1f">
+    <None Include="Forms\BankStatementDetails.b1f">
       <FormCategory>SystemForm</FormCategory>
     </None>
-    <None Include="BankStatementDetails.b1f__orig_srf">
+    <None Include="Forms\BankStatementDetails.b1f__orig_srf">
       <DependentUpon>BankStatementDetails.b1f</DependentUpon>
     </None>
-    <None Include="BankStatementRowDetailsExplanded.b1f">
+    <None Include="Forms\BankStatementRowDetailsExplanded.b1f">
       <FormCategory>SystemForm</FormCategory>
     </None>
-    <None Include="BankStatementRowDetailsExplanded.b1f__orig_srf">
+    <None Include="Forms\BankStatementRowDetailsExplanded.b1f__orig_srf">
       <DependentUpon>BankStatementRowDetailsExplanded.b1f</DependentUpon>
     </None>
-    <None Include="JournalEntry.b1f">
-      <FormCategory>SystemForm</FormCategory>
-    </None>
-    <None Include="JournalEntry.b1f__orig_srf">
-      <DependentUpon>JournalEntry.b1f</DependentUpon>
+    <None Include="Forms\CancelJournalEntrys.b1f">
+      <FormCategory>UserForm</FormCategory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
