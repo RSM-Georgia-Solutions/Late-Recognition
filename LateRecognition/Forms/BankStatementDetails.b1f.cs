@@ -45,15 +45,15 @@ namespace LateRecognition
             }
 
             Matrix matrix =  (Matrix)(GetItem("10000036").Specific);
-            DateTime rowDate = DateTime.ParseExact(((EditText)matrix.Columns.Item("10000033").Cells.Item(pVal.Row).Specific).Value, "yyyyMMdd", CultureInfo.InvariantCulture);
-            DateTime dueDate = DateTime.ParseExact(((EditText)matrix.Columns.Item("10000031").Cells.Item(pVal.Row).Specific).Value, "yyyyMMdd", CultureInfo.InvariantCulture);
+            DateTime rowDate = DateTime.ParseExact(((EditText)matrix.Columns.Item("10000033").Cells.Item(pVal.Row).Specific).Value, "yyyyMMdd", CultureInfo.InvariantCulture);//Posting date
+            DateTime dueDate = DateTime.ParseExact(((EditText)matrix.Columns.Item("10000031").Cells.Item(pVal.Row).Specific).Value, "yyyyMMdd", CultureInfo.InvariantCulture);//Due date 
             string incomingAmountPaymentCurrencyString = ((EditText)matrix.Columns.Item("10000043").Cells.Item(pVal.Row).Specific).Value;
 
-            decimal incomingPaymentAmountLc = string.IsNullOrWhiteSpace(incomingAmountPaymentCurrencyString) ? 0 : decimal.Parse(incomingAmountPaymentCurrencyString.Split(' ')[0]);
-         
-            string branch  =  ((EditText)matrix.Columns.Item("234000093").Cells.Item(pVal.Row).Specific).Value;
+            decimal incomingPaymentAmountLc = string.IsNullOrWhiteSpace(incomingAmountPaymentCurrencyString) ? 0 : decimal.Parse(incomingAmountPaymentCurrencyString.Split(' ')[0]);//Incoming Amt - Payment Currency
 
-            string bpCode  =  ((EditText)matrix.Columns.Item("10000011").Cells.Item(pVal.Row).Specific).Value;
+            string branch  =  ((EditText)matrix.Columns.Item("234000093").Cells.Item(pVal.Row).Specific).Value;//bRanch
+
+            string bpCode  =  ((EditText)matrix.Columns.Item("10000011").Cells.Item(pVal.Row).Specific).Value;//Business Partner Code
 
            
             BankStatementDetailsModel.BpCode = bpCode;

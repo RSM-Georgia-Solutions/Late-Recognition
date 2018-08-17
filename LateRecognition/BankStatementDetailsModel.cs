@@ -18,6 +18,11 @@ namespace LateRecognition
          
         public static string BpCode { get; set; }
         public static string Branch { get; set; }
+        /// <summary>
+        /// Calculate Difference Between Original Amount In Foreign Currency 
+        /// </summary>
+        /// <param name="Diff"></param>
+        /// <returns>Real Amount </returns>
         public static decimal CalculateAppliedAmount(ref decimal Diff)
         {
             decimal exchangeRateOld = (decimal)SAPApi.UiManager.GetCurrencyRate(Currency, StatemenDueDate, Program.XCompany);

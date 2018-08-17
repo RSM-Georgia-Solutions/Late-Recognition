@@ -22,9 +22,7 @@ namespace LateRecognition
         {
             this.Grid0 = ((SAPbouiCOM.Grid)(this.GetItem("Item_0").Specific));
             this.Button0 = ((SAPbouiCOM.Button)(this.GetItem("Item_1").Specific));
-            this.Button0.PressedAfter += new SAPbouiCOM._IButtonEvents_PressedAfterEventHandler(this.Button0_PressedAfter);
-            this.Button1 = ((SAPbouiCOM.Button)(this.GetItem("Item_2").Specific));
-            this.Button1.PressedAfter += new SAPbouiCOM._IButtonEvents_PressedAfterEventHandler(this.Button1_PressedAfter);
+            this.Button0.PressedAfter += new SAPbouiCOM._IButtonEvents_PressedAfterEventHandler(this.Button0_PressedAfter); 
             this.OnCustomInitialize();
 
         }
@@ -40,7 +38,11 @@ namespace LateRecognition
 
         private void OnCustomInitialize()
         {
-            Grid0.DataTable.ExecuteQuery("Select 'N' as [Select], * FROM OJDT WHERE TransCode = '3' ");
+            //საჟურნლო გატარებები ტრანზაქციის კოდით 3 რომლებსის Moemo-ში არ უწერია სხვა გატარებებს
+            Grid0.DataTable.ExecuteQuery(@"Select 'N' as [Select], number, Memo, * FROM OJDT WHERE TransCode = '3'
+            and  number not in (Select  x1.number  FROM OJDT x1
+            inner join OJDT  x2 on CONVERT(nvarchar, x1.Number) = x2.Memo)
+            ");
             Grid0.Columns.Item("Select").Type = BoGridColumnType.gct_CheckBox;
             SAPbouiCOM.EditTextColumn oColumns = (EditTextColumn)Grid0.Columns.Item("TransId");
             oColumns.LinkedObjectType = "30";
@@ -54,6 +56,7 @@ namespace LateRecognition
             {
                 if (Grid0.DataTable.Columns.Item("Select").Cells.Item(i).Value.ToString() == "Y")
                 {
+                    //მონიშნული საჟურნალო გატარებების რევერსის გაკეთება 
                     JournalEntries journalEntryOld = (SAPbobsCOM.JournalEntries)Program.XCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
                     journalEntryOld.GetByKey(int.Parse(Grid0.DataTable.Columns.Item("TransId").Cells.Item(i).Value
                         .ToString()));
@@ -85,21 +88,7 @@ namespace LateRecognition
                 
             }
           
-        }
-
-        private Button Button1;
-
-        private void Button1_PressedAfter(object sboObject, SBOItemEventArg pVal)
-        {
-            JournalEntries journalEntryOld =
-                (SAPbobsCOM.JournalEntries) Program.XCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes
-                    .oJournalEntries);
-            journalEntryOld.GetByKey(2079);
-
-            for (int i = 0; i < journalEntryOld.Lines.Count; i++)
-            {
-                journalEntryOld.Lines.SetCurrentLine(i);
-            }
-        }
+        } 
+   
     }
 }

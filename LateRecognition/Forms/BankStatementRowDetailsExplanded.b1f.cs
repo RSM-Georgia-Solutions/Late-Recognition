@@ -50,7 +50,10 @@ namespace LateRecognition
 
             AddJournalEntryBankExpanded(EditText1.Value);
         }
-
+        /// <summary>
+        /// Add Journal Antry for Baks tatement
+        /// </summary>
+        /// <param name="amount"></param>
         private void AddJournalEntryBankExpanded(string amount)
         {
             if (string.IsNullOrWhiteSpace(amount))
@@ -64,24 +67,24 @@ namespace LateRecognition
                 ((ComboBox)Application.SBO_Application.Forms.ActiveForm.Items.Item("1320002034").Specific).Select(BankStatementDetailsModel.Branch); //Branch;
                 ((ComboBox)Application.SBO_Application.Forms.ActiveForm.Items.Item("9").Specific).Select(2, BoSearchKey.psk_Index); //Trans Code;
                 ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("6").Specific).Value = BankStatementDetailsModel.StatemenRowDate.ToString("yyyyMMdd"); //Posting Date;
-                ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("102").Specific).Value = BankStatementDetailsModel.StatemenDueDate.ToString("yyyyMMdd"); //Posting Date;
+                ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("102").Specific).Value = BankStatementDetailsModel.StatemenDueDate.ToString("yyyyMMdd"); //DueDate;
                 ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
                     .Item("6").Cells.Item(1).Specific).Value = (decimal.Parse(amount) * -1).ToString();//Credit
                 ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
-                    .Item("1").Cells.Item(2).Specific).Value = Program.DownPaymentTaxOffsetAcct;//account
+                    .Item("1").Cells.Item(2).Specific).Value = Program.DownPaymentTaxOffsetAcct;//G/L Acct/BP Code
                 ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
-                    .Item("6").Cells.Item(2).Specific).Value = decimal.Parse(amount).ToString();//Debit
+                    .Item("6").Cells.Item(2).Specific).Value = decimal.Parse(amount).ToString();//Credit
             }
             else
             {
                 ((ComboBox)Application.SBO_Application.Forms.ActiveForm.Items.Item("1320002034").Specific).Select(BankStatementDetailsModel.Branch); //Branch;
                 ((ComboBox)Application.SBO_Application.Forms.ActiveForm.Items.Item("9").Specific).Select(2, BoSearchKey.psk_Index); //Trans Code;
                 ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("6").Specific).Value = BankStatementDetailsModel.StatemenRowDate.ToString("yyyyMMdd"); //Posting Date;
-                ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("102").Specific).Value = BankStatementDetailsModel.StatemenDueDate.ToString("yyyyMMdd"); //Posting Date;
+                ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("102").Specific).Value = BankStatementDetailsModel.StatemenDueDate.ToString("yyyyMMdd"); //DueDate;
                 ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
-                    .Item("6").Cells.Item(1).Specific).Value = decimal.Parse(amount).ToString();//Debit
+                    .Item("6").Cells.Item(1).Specific).Value = decimal.Parse(amount).ToString();//Credit
                 ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
-                    .Item("1").Cells.Item(2).Specific).Value = Program.DownPaymentTaxOffsetAcct;//account
+                    .Item("1").Cells.Item(2).Specific).Value = Program.DownPaymentTaxOffsetAcct;//G/L Acct/BP Code
                 ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
                     .Item("6").Cells.Item(2).Specific).Value = (decimal.Parse(amount) * -1).ToString();//Credit
 
@@ -110,7 +113,19 @@ namespace LateRecognition
             BankStatementDetailsModel.BpCode = ((EditText)GetItem("360000038").Specific).Value;
 
             int chechedCount = 0;
-
+            int chechedCountx = 0;
+            for (int i = 0; i < matrix.RowCount; i++)
+            {
+                var @checked = ((CheckBox) matrix.Columns.Item("10000021").Cells.Item(i + 1).Specific).Checked;
+                if (@checked)
+                {
+                    chechedCountx++;
+                }
+            }
+            if (chechedCountx != 1)
+            {
+                return;
+            }
             for (int i = 0; i < matrix.RowCount; i++)
             {
                 var @checked = ((CheckBox)matrix.Columns.Item("10000021").Cells.Item(i + 1).Specific).Checked;
@@ -130,11 +145,11 @@ namespace LateRecognition
                     recSet.DoQuery($"select  BplName from ODPI where docNum = {docNum}");
                     BankStatementDetailsModel.Branch = recSet.Fields.Item("BplName").Value.ToString();
 
-                    string originalAmountFc = originalAmountFcString.Split(' ')[0];
-                    string currency = originalAmountFcString.Split(' ')[originalAmountFcString.Split(' ').Length - 1];
+                    string originalAmountFc = originalAmountFcString.Split(' ')[0];//Original Amt - Payment Currency
+                    string currency = originalAmountFcString.Split(' ')[originalAmountFcString.Split(' ').Length - 1];//Currency
 
                     string appliedAmountLcstringLc = ((EditText)matrix.Columns.Item("10000017").Cells.Item(i + 1).Specific).Value;
-                    string appliedAmountLc = appliedAmountLcstringLc.Split(' ')[0];
+                    string appliedAmountLc = appliedAmountLcstringLc.Split(' ')[0];//Applied Amt - Payment Currency
 
                     BankStatementDetailsModel.OriginalAmountFc = decimal.Parse(originalAmountFc.Replace("(", "-").Replace(")", ""));
                     BankStatementDetailsModel.Currency = currency;
