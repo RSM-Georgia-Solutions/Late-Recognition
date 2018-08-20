@@ -41,6 +41,11 @@ namespace LateRecognition
 
         private void OnCustomInitialize()
         {
+            RefreshCancelationWizard();
+        }
+
+        private void RefreshCancelationWizard()
+        {
             //საჟურნლო გატარებები ტრანზაქციის კოდით 3 რომლებსის Moemo-ში არ უწერია სხვა გატარებებს
             Grid0.DataTable.ExecuteQuery(@"Select 'N' as [Select], number, Memo, * FROM OJDT WHERE TransCode = '3'
             and  number not in (Select  x1.number  FROM OJDT x1
@@ -83,23 +88,28 @@ namespace LateRecognition
                         journalEntryReverce.Lines.Debit = -journalEntryOld.Lines.Debit;
                         journalEntryReverce.Lines.Credit = -journalEntryOld.Lines.Credit;
                         journalEntryReverce.Lines.ContraAccount = journalEntryOld.Lines.ContraAccount;
-                        journalEntryReverce.Lines.BPLID = journalEntryOld.Lines.BPLID; 
+                        journalEntryReverce.Lines.BPLID = journalEntryOld.Lines.BPLID;
+                        journalEntryReverce.Lines.ExposedTransNumber = journalEntryOld.Number;
                         journalEntryReverce.Lines.Add();
-                  
+
                     }
-                    var x =  journalEntryReverce.Add();
+                    var x = journalEntryReverce.Add();
                     var x1 = Program.XCompany.GetLastErrorDescription();
                 }
-                
+
             }
-          
+            if (activeform._isFormOpen)
+            {
+                activeform.RefreshHistory();
+            }
+            RefreshCancelationWizard();
         }
 
         private Button Button1;
-
+        CanceledTransactionsHistory activeform;
         private void Button1_PressedAfter(object sboObject, SBOItemEventArg pVal)
         {
-            CanceledTransactionsHistory activeform = new CanceledTransactionsHistory();
+            activeform = new CanceledTransactionsHistory(true);
             activeform.Show();
         }
     }
