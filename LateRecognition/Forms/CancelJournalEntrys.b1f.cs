@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LateRecognition.Forms;
-using SAPbobsCOM;
+﻿using SAPbobsCOM;
 using SAPbouiCOM;
 using SAPbouiCOM.Framework;
 
-namespace LateRecognition
+namespace LateRecognition.Forms
 {
-    [FormAttribute("LateRecognition.CancelJournalEntrys", "Forms/CancelJournalEntrys.b1f")]
-    class CancelJournalEntrys : UserFormBase
+    [Form("LateRecognition.CancelJournalEntrys", "Forms/CancelJournalEntrys.b1f")]
+    internal class CancelJournalEntrys : UserFormBase
     {
         public CancelJournalEntrys()
         {
@@ -52,7 +47,7 @@ namespace LateRecognition
             inner join OJDT  x2 on CONVERT(nvarchar, x1.Number) = x2.Memo)
             ");
             Grid0.Columns.Item("Select").Type = BoGridColumnType.gct_CheckBox;
-            SAPbouiCOM.EditTextColumn oColumns = (EditTextColumn)Grid0.Columns.Item("TransId");
+            EditTextColumn oColumns = (EditTextColumn)Grid0.Columns.Item("TransId");
             oColumns.LinkedObjectType = "30";
         }
 
@@ -62,55 +57,53 @@ namespace LateRecognition
         {
             for (int i = 0; i < Grid0.Rows.Count; i++)
             {
-                if (Grid0.DataTable.Columns.Item("Select").Cells.Item(i).Value.ToString() == "Y")
+                if (Grid0.DataTable.Columns.Item("Select").Cells.Item(i).Value.ToString() != "Y") continue;
+                JournalEntries journalEntryOld =
+                    (JournalEntries) Program.XCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
+                journalEntryOld.GetByKey(int.Parse(Grid0.DataTable.Columns.Item("TransId").Cells.Item(i).Value
+                    .ToString()));
+                ///////////////////////////////////
+                JournalEntries journalEntryReverce =
+                    (JournalEntries) Program.XCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
+
+                journalEntryReverce.DueDate = journalEntryOld.DueDate;
+                journalEntryReverce.ReferenceDate = journalEntryOld.ReferenceDate;
+                journalEntryReverce.Reference = journalEntryOld.Reference;
+                journalEntryReverce.Memo = journalEntryOld.Number.ToString();
+                journalEntryReverce.ExposedTransNumber = journalEntryOld.Number;
+                journalEntryReverce.TransactionCode = journalEntryOld.TransactionCode;
+
+                for (int j = 0; j < journalEntryOld.Lines.Count; j++)
                 {
-                    //მონიშნული საჟურნალო გატარებების რევერსის გაკეთება 
-                    JournalEntries journalEntryOld = (SAPbobsCOM.JournalEntries)Program.XCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
-                    journalEntryOld.GetByKey(int.Parse(Grid0.DataTable.Columns.Item("TransId").Cells.Item(i).Value
-                        .ToString()));
-                    ///////////////////////////////////
-                    JournalEntries journalEntryReverce = (SAPbobsCOM.JournalEntries)Program.XCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
+                    journalEntryOld.Lines.SetCurrentLine(j);
 
-                    journalEntryReverce.DueDate = journalEntryOld.DueDate;
-                    journalEntryReverce.ReferenceDate = journalEntryOld.ReferenceDate;
-                    journalEntryReverce.Reference = journalEntryOld.Reference;
-                    journalEntryReverce.Memo = journalEntryOld.Number.ToString();
-                    journalEntryReverce.ExposedTransNumber = journalEntryOld.Number;
-                    journalEntryReverce.TransactionCode = journalEntryOld.TransactionCode;
-
-                    for (int j = 0; j < journalEntryOld.Lines.Count; j++)
-                    {
-                        journalEntryOld.Lines.SetCurrentLine(j);
-
-                        journalEntryReverce.Lines.AccountCode = journalEntryOld.Lines.AccountCode;
-                        journalEntryReverce.Lines.ShortName = journalEntryOld.Lines.ShortName;
-                        journalEntryReverce.Lines.ControlAccount = journalEntryOld.Lines.ControlAccount;
-                        journalEntryReverce.Lines.Debit = -journalEntryOld.Lines.Debit;
-                        journalEntryReverce.Lines.Credit = -journalEntryOld.Lines.Credit;
-                        journalEntryReverce.Lines.ContraAccount = journalEntryOld.Lines.ContraAccount;
-                        journalEntryReverce.Lines.BPLID = journalEntryOld.Lines.BPLID;
-                        journalEntryReverce.Lines.ExposedTransNumber = journalEntryOld.Number;
-                        journalEntryReverce.Lines.Add();
-
-                    }
-                    var x = journalEntryReverce.Add();
-                    var x1 = Program.XCompany.GetLastErrorDescription();
+                    journalEntryReverce.Lines.AccountCode = journalEntryOld.Lines.AccountCode;
+                    journalEntryReverce.Lines.ShortName = journalEntryOld.Lines.ShortName;
+                    journalEntryReverce.Lines.ControlAccount = journalEntryOld.Lines.ControlAccount;
+                    journalEntryReverce.Lines.Debit = -journalEntryOld.Lines.Debit;
+                    journalEntryReverce.Lines.Credit = -journalEntryOld.Lines.Credit;
+                    journalEntryReverce.Lines.ContraAccount = journalEntryOld.Lines.ContraAccount;
+                    journalEntryReverce.Lines.BPLID = journalEntryOld.Lines.BPLID;
+                    journalEntryReverce.Lines.ExposedTransNumber = journalEntryOld.Number;
+                    journalEntryReverce.Lines.Add();
                 }
-
+                var x = journalEntryReverce.Add();
+                var x1 = Program.XCompany.GetLastErrorDescription();
+                //მონიშნული საჟურნალო გატარებების რევერსის გაკეთება 
             }
-            if (activeform._isFormOpen)
+            if (_activeform._isFormOpen)
             {
-                activeform.RefreshHistory();
+                _activeform.RefreshHistory();
             }
             RefreshCancelationWizard();
         }
 
         private Button Button1;
-        CanceledTransactionsHistory activeform;
+        private CanceledTransactionsHistory _activeform;
         private void Button1_PressedAfter(object sboObject, SBOItemEventArg pVal)
         {
-            activeform = new CanceledTransactionsHistory(true);
-            activeform.Show();
+            _activeform = new CanceledTransactionsHistory(true);
+            _activeform.Show();
         }
     }
 }

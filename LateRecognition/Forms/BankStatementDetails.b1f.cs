@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using System.Globalization;
-using System.Linq;
-using System.Text;
+
 using SAPbouiCOM;
 using SAPbouiCOM.Framework;
 using Application = SAPbouiCOM.Framework.Application;
@@ -44,25 +43,25 @@ namespace LateRecognition
                 return;
             }
 
-            Matrix matrix =  (Matrix)(GetItem("10000036").Specific);
+            Matrix matrix = (Matrix)(GetItem("10000036").Specific);
             DateTime rowDate = DateTime.ParseExact(((EditText)matrix.Columns.Item("10000033").Cells.Item(pVal.Row).Specific).Value, "yyyyMMdd", CultureInfo.InvariantCulture);//Posting date
             DateTime dueDate = DateTime.ParseExact(((EditText)matrix.Columns.Item("10000031").Cells.Item(pVal.Row).Specific).Value, "yyyyMMdd", CultureInfo.InvariantCulture);//Due date 
             string incomingAmountPaymentCurrencyString = ((EditText)matrix.Columns.Item("10000043").Cells.Item(pVal.Row).Specific).Value;
 
             decimal incomingPaymentAmountLc = string.IsNullOrWhiteSpace(incomingAmountPaymentCurrencyString) ? 0 : decimal.Parse(incomingAmountPaymentCurrencyString.Split(' ')[0]);//Incoming Amt - Payment Currency
 
-            string branch  =  ((EditText)matrix.Columns.Item("234000093").Cells.Item(pVal.Row).Specific).Value;//bRanch
+            string branch = ((EditText)matrix.Columns.Item("234000093").Cells.Item(pVal.Row).Specific).Value;//bRanch
 
-            string bpCode  =  ((EditText)matrix.Columns.Item("10000011").Cells.Item(pVal.Row).Specific).Value;//Business Partner Code
+            string bpCode = ((EditText)matrix.Columns.Item("10000011").Cells.Item(pVal.Row).Specific).Value;//Business Partner Code
 
-           
+
             BankStatementDetailsModel.BpCode = bpCode;
             BankStatementDetailsModel.Branch = branch;
             BankStatementDetailsModel.IncomingAmountLc = incomingPaymentAmountLc;
             BankStatementDetailsModel.StatemenDueDate = dueDate;
             BankStatementDetailsModel.StatemenRowDate = rowDate;
             Matrix0.GetLineData(pVal.Row);
-            
+
         }
 
         private void OnCustomInitialize()

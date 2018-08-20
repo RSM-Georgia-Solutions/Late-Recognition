@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿ 
 using SAPbouiCOM;
 using SAPbouiCOM.Framework;
 
@@ -10,7 +7,7 @@ namespace LateRecognition.Forms
     [FormAttribute("LateRecognition.Forms.CanceledTransactionsHistory", "Forms/CanceledTransactionsHistory.b1f")]
     class CanceledTransactionsHistory : UserFormBase
     {
-        public   bool _isFormOpen ;
+        public   bool _isFormOpen;
 
 
         public CanceledTransactionsHistory()
