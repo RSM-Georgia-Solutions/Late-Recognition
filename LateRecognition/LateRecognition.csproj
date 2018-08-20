@@ -56,6 +56,9 @@
     <Compile Include="Forms\BankStatementRowDetailsExplanded.b1f.cs">
       <DependentUpon>BankStatementRowDetailsExplanded.b1f</DependentUpon>
     </Compile>
+    <Compile Include="Forms\CanceledTransactionsHistory.b1f.cs">
+      <DependentUpon>CanceledTransactionsHistory.b1f</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CancelJournalEntrys.b1f.cs">
       <DependentUpon>CancelJournalEntrys.b1f</DependentUpon>
     </Compile>
@@ -75,6 +78,9 @@
     </None>
     <None Include="Forms\BankStatementRowDetailsExplanded.b1f__orig_srf">
       <DependentUpon>BankStatementRowDetailsExplanded.b1f</DependentUpon>
+    </None>
+    <None Include="Forms\CanceledTransactionsHistory.b1f">
+      <FormCategory>UserForm</FormCategory>
     </None>
     <None Include="Forms\CancelJournalEntrys.b1f">
       <FormCategory>UserForm</FormCategory>

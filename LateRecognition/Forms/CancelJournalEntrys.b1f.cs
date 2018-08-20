@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LateRecognition.Forms;
 using SAPbobsCOM;
 using SAPbouiCOM;
 using SAPbouiCOM.Framework;
@@ -22,7 +23,9 @@ namespace LateRecognition
         {
             this.Grid0 = ((SAPbouiCOM.Grid)(this.GetItem("Item_0").Specific));
             this.Button0 = ((SAPbouiCOM.Button)(this.GetItem("Item_1").Specific));
-            this.Button0.PressedAfter += new SAPbouiCOM._IButtonEvents_PressedAfterEventHandler(this.Button0_PressedAfter); 
+            this.Button0.PressedAfter += new SAPbouiCOM._IButtonEvents_PressedAfterEventHandler(this.Button0_PressedAfter);
+            this.Button1 = ((SAPbouiCOM.Button)(this.GetItem("Item_2").Specific));
+            this.Button1.PressedAfter += new SAPbouiCOM._IButtonEvents_PressedAfterEventHandler(this.Button1_PressedAfter);
             this.OnCustomInitialize();
 
         }
@@ -67,6 +70,8 @@ namespace LateRecognition
                     journalEntryReverce.ReferenceDate = journalEntryOld.ReferenceDate;
                     journalEntryReverce.Reference = journalEntryOld.Reference;
                     journalEntryReverce.Memo = journalEntryOld.Number.ToString();
+                    journalEntryReverce.ExposedTransNumber = journalEntryOld.Number;
+                    journalEntryReverce.TransactionCode = journalEntryOld.TransactionCode;
 
                     for (int j = 0; j < journalEntryOld.Lines.Count; j++)
                     {
@@ -88,7 +93,14 @@ namespace LateRecognition
                 
             }
           
-        } 
-   
+        }
+
+        private Button Button1;
+
+        private void Button1_PressedAfter(object sboObject, SBOItemEventArg pVal)
+        {
+            CanceledTransactionsHistory activeform = new CanceledTransactionsHistory();
+            activeform.Show();
+        }
     }
 }
