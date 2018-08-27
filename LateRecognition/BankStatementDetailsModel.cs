@@ -18,6 +18,7 @@ namespace LateRecognition
          
         public static string BpCode { get; set; }
         public static string Branch { get; set; }
+        public static string DownPaymentDocNum { get; set; }
         /// <summary>
         /// Calculate Difference Between Original Amount In Foreign Currency 
         /// </summary>

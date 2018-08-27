@@ -41,13 +41,13 @@ namespace LateRecognition.Forms
 
         private void RefreshCancelationWizard()
         {
-            //საჟურნლო გატარებები ტრანზაქციის კოდით 3 რომლებსის Moemo-ში არ უწერია სხვა გატარებებს
-            Grid0.DataTable.ExecuteQuery(@"Select 'N' as [Select], number, Memo, * FROM OJDT WHERE TransCode = '3'
+            //საჟურნლო გატარებები ტრანზაქციის კოდით 2 რომლებსის Moemo-ში არ უწერია სხვა გატარებებს
+            Grid0.DataTable.ExecuteQuery(@"Select 'N' as [Select], number as [JournalEntry Number], Memo as [Comment], TransId as [Transaction ID], RefDAte as [Posting Date], Ref1 as [Down Payment DocNum] FROM OJDT WHERE TransCode = '2'   and ExTransId is null 
             and  number not in (Select  x1.number  FROM OJDT x1
             inner join OJDT  x2 on CONVERT(nvarchar, x1.Number) = x2.Memo)
-            ");
+               ");
             Grid0.Columns.Item("Select").Type = BoGridColumnType.gct_CheckBox;
-            EditTextColumn oColumns = (EditTextColumn)Grid0.Columns.Item("TransId");
+            EditTextColumn oColumns = (EditTextColumn)Grid0.Columns.Item("Transaction ID");
             oColumns.LinkedObjectType = "30";
         }
 
@@ -59,12 +59,12 @@ namespace LateRecognition.Forms
             {
                 if (Grid0.DataTable.Columns.Item("Select").Cells.Item(i).Value.ToString() != "Y") continue;
                 JournalEntries journalEntryOld =
-                    (JournalEntries) Program.XCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
+                    (JournalEntries)Program.XCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
                 journalEntryOld.GetByKey(int.Parse(Grid0.DataTable.Columns.Item("TransId").Cells.Item(i).Value
                     .ToString()));
                 ///////////////////////////////////
                 JournalEntries journalEntryReverce =
-                    (JournalEntries) Program.XCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
+                    (JournalEntries)Program.XCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
 
                 journalEntryReverce.DueDate = journalEntryOld.DueDate;
                 journalEntryReverce.ReferenceDate = journalEntryOld.ReferenceDate;
@@ -91,9 +91,12 @@ namespace LateRecognition.Forms
                 var x1 = Program.XCompany.GetLastErrorDescription();
                 //მონიშნული საჟურნალო გატარებების რევერსის გაკეთება 
             }
-            if (_activeform._isFormOpen)
+            if (_activeform != null)
             {
-                _activeform.RefreshHistory();
+                if (_activeform._isFormOpen)
+                {
+                    _activeform.RefreshHistory();
+                }
             }
             RefreshCancelationWizard();
         }
