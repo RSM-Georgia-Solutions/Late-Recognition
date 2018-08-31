@@ -60,7 +60,7 @@ namespace LateRecognition.Forms
                 if (Grid0.DataTable.Columns.Item("Select").Cells.Item(i).Value.ToString() != "Y") continue;
                 JournalEntries journalEntryOld =
                     (JournalEntries)Program.XCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
-                journalEntryOld.GetByKey(int.Parse(Grid0.DataTable.Columns.Item("TransId").Cells.Item(i).Value
+                journalEntryOld.GetByKey(int.Parse(Grid0.DataTable.Columns.Item("Transaction ID").Cells.Item(i).Value
                     .ToString()));
                 ///////////////////////////////////
                 JournalEntries journalEntryReverce =

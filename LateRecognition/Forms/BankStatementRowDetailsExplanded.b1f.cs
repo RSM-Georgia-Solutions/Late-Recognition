@@ -87,6 +87,8 @@ namespace LateRecognition
 
         private void Button0_PressedAfter(object sboObject, SAPbouiCOM.SBOItemEventArg pVal)
         {
+           
+
             Matrix matrix = (Matrix)GetItem("10000012").Specific;
             if (matrix.RowCount == 0)
             {
@@ -161,9 +163,6 @@ namespace LateRecognition
             {
                 return;
             }
-
-
-
         }
 
         private EditText EditText1;
