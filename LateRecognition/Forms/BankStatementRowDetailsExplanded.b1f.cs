@@ -1,4 +1,5 @@
-﻿ 
+﻿
+using System;
 using SAPbobsCOM;
 using SAPbouiCOM;
 using SAPbouiCOM.Framework;
@@ -59,20 +60,22 @@ namespace LateRecognition
                 return;
             }
 
-       
+
                 ((ComboBox)Application.SBO_Application.Forms.ActiveForm.Items.Item("1320002034").Specific).Select(BankStatementDetailsModel.Branch); //Branch;
-                ((ComboBox)Application.SBO_Application.Forms.ActiveForm.Items.Item("9").Specific).Select("2"); //Trans Code;
-                ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("6").Specific).Value = BankStatementDetailsModel.StatemenRowDate.ToString("yyyyMMdd"); //Posting Date;
-            ((EditText) Application.SBO_Application.Forms.ActiveForm.Items.Item("7").Specific).Value =
+            ((ComboBox)Application.SBO_Application.Forms.ActiveForm.Items.Item("9").Specific).Select("2"); //Trans Code;
+            ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("6").Specific).Value = BankStatementDetailsModel.StatemenRowDate.ToString("yyyyMMdd"); //Posting Date;
+            ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("7").Specific).Value =
                 BankStatementDetailsModel.DownPaymentDocNum;//Dpm Doc Num
-                ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("102").Specific).Value = BankStatementDetailsModel.StatemenDueDate.ToString("yyyyMMdd"); //DueDate;
-                ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
-                    .Item("6").Cells.Item(1).Specific).Value = (decimal.Parse(amount) * -1).ToString();//Credit
-                ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
-                    .Item("1").Cells.Item(2).Specific).Value = Program.DownPaymentTaxOffsetAcct;//G/L Acct/BP Code
-                ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
-                    .Item("6").Cells.Item(2).Specific).Value = decimal.Parse(amount).ToString();//Credit
-           
+            ((EditText)Application.SBO_Application.Forms.ActiveForm.Items.Item("102").Specific).Value = BankStatementDetailsModel.StatemenDueDate.ToString("yyyyMMdd"); //DueDate;
+            ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
+                .Item("6").Cells.Item(1).Specific).Value = (decimal.Parse(amount) * -1).ToString();//Credit
+            ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
+                .Item("1").Cells.Item(2).Specific).Value = Program.DownPaymentTaxOffsetAcct;//G/L Acct/BP Code
+            ((EditText)((Matrix)Application.SBO_Application.Forms.ActiveForm.Items.Item("76").Specific).Columns
+                .Item("6").Cells.Item(2).Specific).Value = decimal.Parse(amount).ToString();//Credit
+
+
+
         }
 
         private SAPbouiCOM.EditText EditText0;
@@ -87,8 +90,6 @@ namespace LateRecognition
 
         private void Button0_PressedAfter(object sboObject, SAPbouiCOM.SBOItemEventArg pVal)
         {
-           
-
             Matrix matrix = (Matrix)GetItem("10000012").Specific;
             if (matrix.RowCount == 0)
             {
@@ -101,7 +102,7 @@ namespace LateRecognition
             int chechedCountx = 0;
             for (int i = 0; i < matrix.RowCount; i++)
             {
-                var @checked = ((CheckBox) matrix.Columns.Item("10000021").Cells.Item(i + 1).Specific).Checked;
+                var @checked = ((CheckBox)matrix.Columns.Item("10000021").Cells.Item(i + 1).Specific).Checked;
                 if (@checked)
                 {
                     chechedCountx++;
@@ -119,26 +120,51 @@ namespace LateRecognition
                     chechedCount++;
                     string originalAmountFcString = ((EditText)matrix.Columns.Item("360000041").Cells.Item(i + 1).Specific).Value;
                     string balanceDueString = ((EditText)matrix.Columns.Item("10000013").Cells.Item(i + 1).Specific).Value;
-                    decimal balanceDue = decimal.Parse(balanceDueString.Split(' ')[0]);
+                    decimal balanceDue = 0;
+                    try
+                    {
+                          balanceDue = decimal.Parse(balanceDueString.Split(' ')[0]); 
+                    }
+                    catch (Exception)
+                    { 
+                       return;
+                    }
+
+
                     string document = ((EditText)matrix.Columns.Item("10000035").Cells.Item(i + 1).Specific).Value;
                     int indexOfhyphen = document.IndexOf("-");
                     int indexOfSlash = document.IndexOf("/");
                     Recordset recSet =
                         (Recordset)Program.XCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                     string docType = document.Substring(0, 2);
+                    BankStatementDetailsModel.DocType = docType;
                     int docNum = int.Parse(document.Substring(indexOfhyphen + 1, indexOfSlash - indexOfhyphen - 1));
-                    recSet.DoQuery($"select  BplName, docNum from ODPI where docNum = {docNum}");
-                    BankStatementDetailsModel.Branch = recSet.Fields.Item("BplName").Value.ToString();
-                    BankStatementDetailsModel.DownPaymentDocNum = recSet.Fields.Item("docNum").Value.ToString();
 
-                    string originalAmountFc = originalAmountFcString.Split(' ')[0];//Original Amt - Payment Currency
-                    string currency = originalAmountFcString.Split(' ')[originalAmountFcString.Split(' ').Length - 1];//Currency
+                    switch (BankStatementDetailsModel.DocType)
+                    {
+                        case "IN":
+                            recSet.DoQuery($"select  BplName, DocTotalFC, DocCur  from OINV where docNum = {docNum}");
+                            break;
+                        case "DT":
+                            recSet.DoQuery($"select  BplName, DocTotalFC, DocCur  from ODPI where docNum = {docNum}");
+                            break;
+                        case "JE":
+                            recSet.DoQuery($"select BplName, SUM(FCCredit) DocTotalFC,  ISNULL( FCCurrency, 'GEL') as DocCur, * from jdt1 where TransId = {docNum} and ShortName = '{BankStatementDetailsModel.BpCode}'");
+                            break;
+                        default: return;
+                    }
+
+
+                    BankStatementDetailsModel.Branch = recSet.Fields.Item("BplName").Value.ToString();
+                    BankStatementDetailsModel.OriginalAmountFc = decimal.Parse(recSet.Fields.Item("DocTotalFC").Value.ToString());
+                    BankStatementDetailsModel.Currency = recSet.Fields.Item("DocCur").Value.ToString();
+
 
                     string appliedAmountLcstringLc = ((EditText)matrix.Columns.Item("10000017").Cells.Item(i + 1).Specific).Value;
                     string appliedAmountLc = appliedAmountLcstringLc.Split(' ')[0];//Applied Amt - Payment Currency
 
-                    BankStatementDetailsModel.OriginalAmountFc = decimal.Parse(originalAmountFc.Replace("(", "-").Replace(")", ""));
-                    BankStatementDetailsModel.Currency = currency;
+
+
                     BankStatementDetailsModel.AppliedAmountFc = decimal.Parse(appliedAmountLc);
                     decimal diff = 0;
                     decimal realAmount = BankStatementDetailsModel.CalculateAppliedAmount(ref diff);
@@ -148,7 +174,7 @@ namespace LateRecognition
                     {
                         Application.SBO_Application.MessageBox($"საჭიროა ახალი ავანსის  დოკუმენტის შექმნა");
                         ((EditText)matrix.Columns.Item("10000017").Cells.Item(i + 1).Specific).Value = (balanceDue).ToString();
-                        EditText2.Value  = (realAmount - balanceDue).ToString();
+                        EditText2.Value = (realAmount - balanceDue).ToString();
                         break;
                     }
 
@@ -175,7 +201,7 @@ namespace LateRecognition
             GetItem("Item_2").Top = GetItem("10000001").Top;
             GetItem("Item_2").Left = GetItem("10000001").Left + 140;
             GetItem("Item_2").RightJustified = GetItem("10000001").RightJustified;
-          
+
         }
     }
 }

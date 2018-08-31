@@ -12,6 +12,7 @@ namespace LateRecognition
         public static DateTime StatemenRowDate { get; set; }
         public static DateTime StatemenDueDate { get; set; }
         public static string Currency { get; set; }
+        public static string DocType { get; set; }
         public static decimal IncomingAmountLc { get; set; }
         public static decimal OriginalAmountFc { get; set; }
         public static decimal AppliedAmountFc { get; set; }
