@@ -139,7 +139,7 @@ namespace LateRecognition
                     string docType = document.Substring(0, 2);
                     BankStatementDetailsModel.DocType = docType;
                     int docNum = int.Parse(document.Substring(indexOfhyphen + 1, indexOfSlash - indexOfhyphen - 1));
-                    BankStatementDetailsModel.DownPaymentDocNum =  docNum.ToString();
+
                     switch (BankStatementDetailsModel.DocType)
                     {
                         case "IN":
@@ -201,8 +201,7 @@ namespace LateRecognition
             GetItem("Item_2").Top = GetItem("10000001").Top;
             GetItem("Item_2").Left = GetItem("10000001").Left + 165;
             GetItem("Item_2").RightJustified = GetItem("10000001").RightJustified;
-            GetItem("Item_2").Height = GetItem("10000001").Height;
-            GetItem("Item_2").Width = GetItem("10000001").Width;
+
         }
     }
 }
