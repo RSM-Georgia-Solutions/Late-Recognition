@@ -203,8 +203,6 @@ namespace LateRecognition
             GetItem("Item_2").RightJustified = GetItem("10000001").RightJustified;
             GetItem("Item_2").Height = GetItem("10000001").Height;
             GetItem("Item_2").Width = GetItem("10000001").Width;
-
-
         }
     }
 }

@@ -3,5 +3,11 @@ C:\Users\Administrator\Source\Repos\Late-Recognition\LateRecognition\bin\Debug\L
 C:\Users\Administrator\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.exe
 C:\Users\Administrator\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.pdb
 C:\Users\Administrator\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.csprojResolveAssemblyReference.cache
+C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\bin\Debug\LateRecognition.exe
+C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\bin\Debug\LateRecognition.pdb
+C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\bin\Debug\SAPApi.dll
+C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\bin\Debug\ConverterLib_x64.dll
+C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\bin\Debug\SAPApi.pdb
+C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.csprojResolveAssemblyReference.cache
 C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.exe
 C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.pdb
