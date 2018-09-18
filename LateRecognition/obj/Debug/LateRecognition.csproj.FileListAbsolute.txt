@@ -3,3 +3,5 @@ C:\Users\Administrator\Source\Repos\Late-Recognition\LateRecognition\bin\Debug\L
 C:\Users\Administrator\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.exe
 C:\Users\Administrator\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.pdb
 C:\Users\Administrator\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.csprojResolveAssemblyReference.cache
+C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.exe
+C:\Users\nkurdadze\Source\Repos\Late-Recognition\LateRecognition\obj\Debug\LateRecognition.pdb
