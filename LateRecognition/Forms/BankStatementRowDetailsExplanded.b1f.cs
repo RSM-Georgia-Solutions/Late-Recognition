@@ -199,7 +199,7 @@ namespace LateRecognition
         private void Form_ResizeAfter(SBOItemEventArg pVal)
         {
             GetItem("Item_2").Top = GetItem("10000001").Top;
-            GetItem("Item_2").Left = GetItem("10000001").Left + 240;
+            GetItem("Item_2").Left = GetItem("10000001").Left + 165;
             GetItem("Item_2").RightJustified = GetItem("10000001").RightJustified;
             GetItem("Item_2").Height = GetItem("10000001").Height;
             GetItem("Item_2").Width = GetItem("10000001").Width;
