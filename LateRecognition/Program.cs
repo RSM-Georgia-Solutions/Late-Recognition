@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SAPApi;
 using SAPbobsCOM;
 using SAPbouiCOM.Framework;
 
@@ -23,7 +24,7 @@ namespace LateRecognition
 
                 string query = "SELECT LinkAct_18  FROM OACP where PeriodCat ='" +
                                DateTime.Now.Year + "'";
-                recSet1.DoQuery(query);
+                recSet1.DoQuery(DIManager.QueryHanaTransalte(query));
 
                 DownPaymentTaxOffsetAcct = recSet1.Fields.Item("LinkAct_18").Value.ToString();
                 MyMenu.AddMenuItems();

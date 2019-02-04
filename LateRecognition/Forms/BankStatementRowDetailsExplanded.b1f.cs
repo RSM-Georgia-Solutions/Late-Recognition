@@ -4,6 +4,7 @@ using SAPbobsCOM;
 using SAPbouiCOM;
 using SAPbouiCOM.Framework;
 using Application = SAPbouiCOM.Framework.Application;
+using SAPApi;
 
 namespace LateRecognition
 {
@@ -143,13 +144,13 @@ namespace LateRecognition
                     switch (BankStatementDetailsModel.DocType)
                     {
                         case "IN":
-                            recSet.DoQuery($"select  BplName, DocTotalFC, DocCur  from OINV where docNum = {docNum}");
+                            recSet.DoQuery(DIManager.QueryHanaTransalte($"select  BplName, DocTotalFC, DocCur  from OINV where docNum = {docNum}"));
                             break;
                         case "DT":
-                            recSet.DoQuery($"select  BplName, DocTotalFC, DocCur  from ODPI where docNum = {docNum}");
+                            recSet.DoQuery(DIManager.QueryHanaTransalte($"select  BplName, DocTotalFC, DocCur  from ODPI where docNum = {docNum}"));
                             break;
                         case "JE":
-                            recSet.DoQuery($"select BplName, SUM(FCCredit) DocTotalFC,  ISNULL( FCCurrency, 'GEL') as DocCur, * from jdt1 where TransId = {docNum} and ShortName = '{BankStatementDetailsModel.BpCode}'");
+                            recSet.DoQuery(DIManager.QueryHanaTransalte($"select BplName, SUM(FCCredit) DocTotalFC,  ISNULL( FCCurrency, 'GEL') as DocCur, * from jdt1 where TransId = {docNum} and ShortName = '{BankStatementDetailsModel.BpCode}'"));
                             break;
                         default: return;
                     }

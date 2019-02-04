@@ -1,4 +1,5 @@
-﻿using SAPbobsCOM;
+﻿using SAPApi;
+using SAPbobsCOM;
 using SAPbouiCOM;
 using SAPbouiCOM.Framework;
 
@@ -42,10 +43,10 @@ namespace LateRecognition.Forms
         private void RefreshCancelationWizard()
         {
             //საჟურნლო გატარებები ტრანზაქციის კოდით 2 რომლებსის Moemo-ში არ უწერია სხვა გატარებებს
-            Grid0.DataTable.ExecuteQuery(@"Select 'N' as [Select], number as [JournalEntry Number], Memo as [Comment], TransId as [Transaction ID], RefDAte as [Posting Date], Ref1 as [Down Payment DocNum] FROM OJDT WHERE TransCode = '2'   and ExTransId is null 
+            Grid0.DataTable.ExecuteQuery(DIManager.QueryHanaTransalte(@"Select 'N' as [Select], number as [JournalEntry Number], Memo as [Comment], TransId as [Transaction ID], RefDAte as [Posting Date], Ref1 as [Down Payment DocNum] FROM OJDT WHERE TransCode = '2'   and ExTransId is null 
             and  number not in (Select  x1.number  FROM OJDT x1
             inner join OJDT  x2 on CONVERT(nvarchar, x1.Number) = x2.Memo)
-               ");
+               "));
             Grid0.Columns.Item("Select").Type = BoGridColumnType.gct_CheckBox;
             EditTextColumn oColumns = (EditTextColumn)Grid0.Columns.Item("Transaction ID");
             oColumns.LinkedObjectType = "30";

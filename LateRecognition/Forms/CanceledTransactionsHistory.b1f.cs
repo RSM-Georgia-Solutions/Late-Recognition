@@ -1,4 +1,5 @@
 ﻿ 
+using SAPApi;
 using SAPbouiCOM;
 using SAPbouiCOM.Framework;
 
@@ -44,8 +45,8 @@ namespace LateRecognition.Forms
 
         public void RefreshHistory()
         {
-            Grid0.DataTable.ExecuteQuery(@"Select   x1.number as [Canceled],   x2.Number  as [Cancelation] FROM OJDT x1  inner join 
-               OJDT x2  on x1.number  = x2.ExTransId where  x2.ExTransId is not null");
+            Grid0.DataTable.ExecuteQuery(DIManager.QueryHanaTransalte(@"Select   x1.number as [Canceled],   x2.Number  as [Cancelation] FROM OJDT x1  inner join 
+               OJDT x2  on x1.number  = x2.ExTransId where  x2.ExTransId is not null"));
             SAPbouiCOM.EditTextColumn oColumns = (EditTextColumn)Grid0.Columns.Item("Canceled");
             oColumns.LinkedObjectType = "30";
             SAPbouiCOM.EditTextColumn oColumns1 = (EditTextColumn)Grid0.Columns.Item("Cancelation");
